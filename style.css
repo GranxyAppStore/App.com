@@ -1,0 +1,669 @@
+:root {
+    /* Light Theme Colors */
+    --primary-bg: white;
+    --secondary-bg: #f0f0f0; /* Used for middle boxes, trending container background */
+    --tertiary-bg: #e0e0e0; /* Used for bottom video box, square image box */
+    --text-color: #333;
+    --subtle-text-color: #555;
+    --placeholder-color: #888;
+    --border-color: #ccc;
+    --box-shadow-light: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --box-shadow-subtle: 0 2px 4px rgba(0, 0, 0, 0.08);
+    --button-primary-bg: #007bff;
+    --button-primary-hover-bg: #0056b3;
+    --get-button-bg: powderblue; /* Powder blue background */
+    --get-button-hover-bg: lightskyblue;
+    --search-bar-bg: #f8f8f8;
+    --toggle-track-bg: #ccc;
+    --toggle-thumb-bg: white;
+    --toggle-active-bg: #007bff; /* Keep primary blue for active toggle */
+}
+
+body.dark-mode {
+    /* Dark Theme Colors */
+    --primary-bg: #1a1a1a; /* Dark charcoal */
+    --secondary-bg: #2a2a2a; /* Slightly lighter charcoal for cards/containers */
+    --tertiary-bg: #3a3a3a; /* Another shade for specific elements */
+    --text-color: #f0f0f0; /* Light text */
+    --subtle-text-color: #b0b0b0; /* Lighter subtle text */
+    --placeholder-color: #999;
+    --border-color: #555;
+    --box-shadow-light: 0 4px 6px rgba(0, 0, 0, 0.2);
+    --box-shadow-subtle: 0 2px 4px rgba(0, 0, 0, 0.15);
+    --button-primary-bg: #0056b3;
+    --button-primary-hover-bg: #003f8c;
+    --get-button-bg: #006666; /* Darker powder blue equivalent */
+    --get-button-hover-bg: #008888;
+    --search-bar-bg: #222222;
+    --toggle-track-bg: #555;
+    --toggle-thumb-bg: #ccc;
+    --toggle-active-bg: #007bff; /* Keep primary blue for active toggle */
+}
+
+body {
+    margin: 0; /* Ensures no default browser margin */
+    padding: 0; /* Ensures no default browser padding */
+    font-family: sans-serif;
+    min-height: 100vh; /* Full viewport height */
+    width: 100vw; /* Full viewport width */
+    background-color: var(--secondary-bg); /* Use variable for body background */
+    overflow: hidden; /* Hide scrollbars if content overflows during transitions */
+    color: var(--text-color); /* Set default text color */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw; /* Explicitly use viewport width for full screen */
+    height: 100vh; /* Explicitly use viewport height for full screen */
+    background-color: var(--primary-bg); /* Use variable for screen background */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease-in-out, background-color 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+    box-sizing: border-box; /* Include padding in element's total width and height */
+    color: var(--text-color); /* Inherit text color from body or override */
+}
+
+.screen.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+#welcome-screen h1 {
+    font-size: 1.8em; /* Adjusted for mobile */
+    color: var(--text-color);
+    margin-bottom: 30px; /* Space between text and button */
+    text-align: center;
+    padding: 0 20px; /* Add some padding for smaller screens */
+}
+
+#signup-button,
+#continue-button { /* Applied to both signup and continue buttons */
+    background-color: var(--button-primary-bg); /* A nice blue color */
+    color: white;
+    padding: 15px 40px; /* Larger touch target for mobile */
+    border: none;
+    border-radius: 25px; /* Rounded edges */
+    font-size: 1.2em; /* Adjusted for mobile */
+    cursor: pointer;
+    box-shadow: 0 4px 6px var(--box-shadow-light);
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+    width: clamp(200px, 80%, 300px); /* Responsive width */
+    margin-top: 30px; /* Space above continue button */
+}
+
+#signup-button:hover,
+#continue-button:hover {
+    background-color: var(--button-primary-hover-bg);
+    transform: translateY(-2px);
+}
+
+#signup-button:active,
+#continue-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px var(--box-shadow-light);
+}
+
+/* Styles for the rolling dot animation */
+.rolling-dots-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    margin: 20px 0;
+    position: relative; /* For proper positioning of dots */
+}
+
+.rolling-dot {
+    width: 12px;
+    height: 12px;
+    margin: 0 4px;
+    background-color: var(--button-primary-bg);
+    border-radius: 50%;
+    opacity: 0;
+    animation: dot-fade 1.4s infinite ease-in-out both; /* 'both' keeps initial state */
+}
+
+.rolling-dot:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.rolling-dot:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes dot-fade {
+    0%, 80%, 100% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    40% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Styles for username input field (login screen) */
+#login-username-input {
+    width: clamp(250px, 90%, 400px); /* Responsive width for input */
+    padding: 15px 20px;
+    border: 2px solid var(--border-color);
+    border-radius: 25px;
+    font-size: 1.1em;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 4px var(--box-shadow-subtle);
+    background-color: var(--primary-bg); /* Input background */
+    color: var(--text-color); /* Input text color */
+}
+
+#login-username-input::placeholder {
+    color: var(--placeholder-color);
+}
+
+#login-username-input:focus {
+    border-color: var(--button-primary-bg);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* Styles for processing message */
+#processing-message {
+    font-size: 1.2em;
+    color: var(--text-color);
+    margin-bottom: 20px;
+    text-align: center;
+    padding: 0 20px; /* Ensure text doesn't touch edges on small screens */
+}
+
+/* Styles for username initial circle */
+.username-initial-circle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: var(--button-primary-bg);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    box-shadow: 0 4px 8px var(--box-shadow-light);
+    z-index: 10; /* Ensure it's above other elements if they overlap */
+    cursor: pointer; /* Indicate it's clickable */
+}
+
+/* New styles for the search bar */
+.search-bar-container {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 90px; /* Leaves space for the username initial circle */
+    height: 50px; /* Make it similar height to the initial circle */
+    background-color: var(--search-bar-bg); /* Light background for the search bar */
+    border-radius: 25px; /* Half of height to make it rounded on left and right */
+    box-shadow: 0 2px 4px var(--box-shadow-subtle);
+    padding: 0 15px; /* Internal padding */
+    box-sizing: border-box; /* Include padding in element's total width and height */
+    z-index: 5; /* Below the initial circle if they ever overlap by mistake */
+    display: flex; /* Use flexbox to align input and button */
+    align-items: center; /* Center items vertically */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-input {
+    flex-grow: 1; /* Make input take up available space */
+    border: none;
+    background: transparent;
+    padding: 0; /* Remove default input padding, container padding handles it */
+    font-size: 1.1em;
+    color: var(--text-color);
+    outline: none; /* Remove focus outline */
+    width: 100%; /* Ensure it fills its container in flex context */
+}
+
+.search-input::placeholder {
+    color: var(--placeholder-color);
+}
+
+.search-icon-button {
+    background: none;
+    border: none;
+    font-size: 1.4em; /* Larger icon */
+    cursor: pointer;
+    color: var(--button-primary-bg); /* Match theme color */
+    padding: 0 5px; /* Add some horizontal padding to the button itself */
+    margin-left: 5px; /* Space between input and icon */
+    display: flex; /* For centering the glyph if needed */
+    align-items: center;
+    justify-content: center;
+    height: 100%; /* Take full height of container for better touch target */
+    border-radius: 0 25px 25px 0; /* Round only right edges for a smoother transition with search bar */
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    flex-shrink: 0; /* Prevent it from shrinking */
+}
+
+.search-icon-button:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+.search-icon-button:active {
+    background-color: rgba(0, 123, 255, 0.2);
+}
+
+/* Adjust main app screen to not center content, allowing absolute positioning */
+#main-app-screen {
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    justify-content: flex-start; /* Align content to top */
+    align-items: center; /* Center content horizontally */
+    padding-top: 90px; /* Space for search bar and initial circle */
+    padding-bottom: 180px; /* Space for the bottom rectangular box, now containing Ads label */
+    position: relative; /* Needed for absolutely positioned children like the bottom box */
+    overflow-y: auto; /* Allow scrolling if content overflows vertically */
+    box-sizing: border-box; /* Include padding in element's total width and height */
+}
+
+/* New: Style for section titles like "Trending Apps" */
+.section-title {
+    width: clamp(280px, 90%, 600px); /* Match width of boxes below it */
+    text-align: left; /* Align text to the left within its container */
+    font-size: 1.1em;
+    color: var(--text-color);
+    margin: 20px 0 10px 0; /* Space above and below, more below to separate from box */
+    padding-left: 10px; /* Align text with the content inside the boxes */
+    box-sizing: border-box;
+    font-weight: bold;
+}
+
+/* New: Styles for the overall bottom ad section containing label and video */
+.bottom-ad-section {
+    position: absolute; /* Position it absolutely within main-app-screen */
+    bottom: 20px; /* 20px from the bottom edge of main-app-screen */
+    left: 50%;
+    transform: translateX(-50%); /* Center horizontally */
+    width: clamp(280px, 90%, 600px); /* Responsive width */
+    display: flex; /* Arrange children vertically */
+    flex-direction: column;
+    align-items: flex-start; /* Align label to the left */
+    z-index: 10; /* Ensure it's above other elements if they overlap */
+}
+
+/* Styles for the "Ads" label */
+.ad-label {
+    font-size: 0.9em;
+    color: var(--subtle-text-color);
+    margin: 0 0 5px 0; /* Space between label and video box */
+    text-align: left;
+    width: 100%; /* Ensure it spans the width of its parent for text-align to work */
+    padding-left: 5px; /* Slight padding to align text better with the box */
+}
+
+/* New: Styles for the rectangular box that now specifically contains the video */
+.bottom-rectangular-box {
+    width: 100%; /* Take full width of its parent (.bottom-ad-section) */
+    aspect-ratio: 2 / 1; /* Maintain an 8:4 aspect ratio (2:1) */
+    background-color: var(--tertiary-bg); /* A light grey color for the box */
+    border-radius: 15px; /* Slightly rounded corners */
+    box-shadow: 0 4px 8px var(--box-shadow-light); /* Subtle shadow for depth */
+    overflow: hidden; /* Ensure video corners are rounded with the box */
+    display: flex; /* Use flexbox to center video if needed, though video will fill */
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bottom-rectangular-box video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the entire area of the container */
+    border-radius: 15px; /* Apply border-radius directly to video as well for consistency */
+}
+
+/* New: Styles for the three 8:2 rectangular boxes in the middle */
+.middle-rectangular-box {
+    width: clamp(280px, 90%, 600px); /* Responsive width, consistent with bottom box */
+    aspect-ratio: 4 / 1; /* 8:2 simplifies to 4:1 */
+    background-color: var(--secondary-bg); /* Slightly different shade for distinction */
+    border-radius: 10px; /* Slightly rounded corners */
+    box-shadow: 0 2px 4px var(--box-shadow-subtle); /* Subtle shadow */
+    margin-top: 20px; /* Space from the element above (or previous box) */
+    box-sizing: border-box; /* Include padding in element's total width and height */
+    display: flex; /* Use flexbox to align content inside */
+    align-items: center; /* Center items vertically */
+    padding: 10px; /* Add some internal padding */
+    cursor: pointer; /* Indicate clickable */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.middle-rectangular-box:active {
+    transform: translateY(1px); /* Simple press effect */
+}
+
+/* New: Styles for the 2:2 square box inside the middle rectangular boxes */
+.square-box {
+    height: 100%; /* Take full height of its parent (minus padding) */
+    aspect-ratio: 1 / 1; /* Maintain a 2:2 (1:1) aspect ratio */
+    background-color: var(--tertiary-bg); /* A darker grey for contrast */
+    border-radius: 8px; /* Slightly rounded corners */
+    box-shadow: 0 1px 3px var(--box-shadow-subtle); /* Subtle shadow */
+    flex-shrink: 0; /* Prevent it from shrinking */
+    overflow: hidden; /* Hide anything overflowing the square box, e.g., images */
+    display: flex; /* For centering images */
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.square-box .app-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Ensure the whole image is visible */
+    border-radius: 8px; /* Match parent border-radius */
+}
+
+/* Styles for the Search Results Screen */
+#search-results-screen {
+    /* Inherits general .screen styles for full page, white background */
+    justify-content: flex-start; /* Align content to the top */
+    padding-top: 50px; /* Some padding from the top */
+    overflow-y: auto; /* Allow scrolling if content overflows */
+}
+
+.search-query-display-text {
+    font-size: 1.3em;
+    color: var(--text-color);
+    margin-bottom: 30px;
+    text-align: center;
+    padding: 0 20px;
+    width: 100%; /* Ensure it spans available width */
+    box-sizing: border-box;
+}
+
+/* Styles for a generic container for app boxes (trending or search results) */
+.apps-container {
+    width: 100%; /* Take full width of its parent */
+    display: flex;
+    flex-direction: column; /* Stack results vertically */
+    align-items: center; /* Center items horizontally */
+    padding: 0 20px; /* Padding on the sides */
+    box-sizing: border-box;
+}
+
+/* Reusing .middle-rectangular-box for the search result item and trending items */
+.apps-container .middle-rectangular-box {
+    margin-top: 20px; /* Space from the query text or previous item */
+    margin-bottom: 0; /* Override general middle-rectangular-box if it had a bottom margin */
+    /* All other styles inherited from .middle-rectangular-box */
+}
+
+.app-details {
+    flex-grow: 1; /* Take up remaining space */
+    margin-left: 15px; /* Space between image and details */
+    color: var(--subtle-text-color);
+    font-size: 0.95em;
+    line-height: 1.4;
+    text-align: left; /* Align text within details box */
+}
+
+.app-details h3 {
+    margin: 0 0 5px 0;
+    color: var(--text-color);
+    font-size: 1.1em;
+}
+
+.app-details p {
+    margin: 0;
+}
+
+/* New: Style for the "GET" button in trending/search result boxes */
+.get-button {
+    background-color: var(--get-button-bg); /* Powder blue background */
+    color: var(--text-color); /* Darker text for contrast */
+    padding: 5px 15px; /* Vertical and horizontal padding */
+    border-radius: 25px; /* Make it fully rounded on left and right */
+    font-size: 0.9em; /* Smaller font size */
+    font-weight: bold;
+    margin-left: auto; /* Pushes the button to the far right */
+    cursor: pointer;
+    box-shadow: 0 1px 2px var(--box-shadow-subtle); /* Subtle shadow */
+    transition: background-color 0.2s ease, transform 0.1s ease, color 0.3s ease;
+    flex-shrink: 0; /* Prevent it from shrinking */
+    height: 30px; /* Ensure a fixed height for consistent rounding */
+    display: flex; /* Use flex to center text vertically */
+    align-items: center;
+    justify-content: center;
+}
+
+.get-button:hover {
+    background-color: var(--get-button-hover-bg); /* Slightly darker on hover */
+}
+
+.get-button:active {
+    transform: translateY(1px); /* Simple press effect */
+    box-shadow: 0 0px 1px var(--box-shadow-subtle);
+}
+
+/* Styles for Account Management Screen */
+#account-management-screen {
+    justify-content: flex-start; /* Align content to the top */
+    padding-top: 20px; /* Padding for the top */
+    overflow-y: auto;
+    gap: 20px; /* Space between elements */
+}
+
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: none;
+    border: none;
+    font-size: 1.8em;
+    color: var(--text-color);
+    cursor: pointer;
+    z-index: 20;
+    padding: 5px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease, color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.back-button:active {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.account-header-box {
+    width: clamp(280px, 90%, 600px); /* 8:2 responsive width */
+    aspect-ratio: 4 / 1; /* Roughly 8:2 aspect ratio */
+    background-color: var(--secondary-bg);
+    border-radius: 10px;
+    box-shadow: 0 2px 4px var(--box-shadow-subtle);
+    padding: 15px 20px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end; /* Align texts to the bottom */
+    position: relative;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    margin-top: 60px; /* Space below back button if needed, or from top */
+}
+
+.account-header-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.username-manage-text {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: var(--text-color);
+    margin: 0 0 5px 0;
+    line-height: 1.2;
+}
+
+.granxy-app-store-text {
+    font-size: 0.85em;
+    color: var(--subtle-text-color);
+    margin: 0;
+}
+
+.copyright-text {
+    font-size: 0.8em;
+    color: var(--subtle-text-color);
+    align-self: flex-end; /* Align copyright to the bottom right */
+}
+
+.account-option-box {
+    width: clamp(280px, 90%, 600px); /* 8:1 responsive width */
+    aspect-ratio: 8 / 1; /* Roughly 8:1 aspect ratio */
+    background-color: var(--secondary-bg);
+    border-radius: 10px;
+    box-shadow: 0 2px 4px var(--box-shadow-subtle);
+    padding: 0 20px; /* Horizontal padding */
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.1em;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.1s ease;
+}
+
+.account-option-box:active {
+    transform: translateY(1px);
+}
+
+/* Toggle Switch Styles */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+.toggle-input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-label {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--toggle-track-bg);
+    transition: 0.4s;
+    border-radius: 20px;
+}
+
+.toggle-label:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: var(--toggle-thumb-bg);
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+.toggle-input:checked + .toggle-label {
+    background-color: var(--toggle-active-bg);
+}
+
+.toggle-input:checked + .toggle-label:before {
+    transform: translateX(20px);
+}
+
+/* New: App Lock Modal Styles */
+.app-lock-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+    backdrop-filter: blur(5px); /* Blur the background */
+    -webkit-backdrop-filter: blur(5px); /* For Safari */
+    z-index: 1000; /* Ensure it's on top of everything */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.app-lock-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.app-lock-box {
+    width: clamp(250px, 70%, 300px); /* Roughly 4:4 aspect for mobile, larger on desktop */
+    aspect-ratio: 1 / 1; /* Maintain square aspect ratio */
+    background-color: var(--primary-bg);
+    border-radius: 20px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+    color: var(--text-color);
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer; /* Indicate it's interactive */
+    transition: transform 0.2s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.app-lock-box:active {
+    transform: scale(0.98); /* Slight press feedback */
+}
+
+.fingerprint-icon {
+    width: 60px;
+    height: 60px;
+    border: 2px solid var(--button-primary-bg);
+    border-radius: 50%;
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em; /* For a potential icon, though not used now */
+    color: var(--button-primary-bg);
+    /* Could add a fingerprint icon here using background-image or a font icon */
+}
+
+/* Shake animation for bad fingerprint */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+body.shake-animation {
+    animation: shake 0.2s ease-in-out 10; /* Repeat 10 times over 2 seconds */
+}
