@@ -1,0 +1,891 @@
+body {
+    margin: 0; /* Ensures no default browser margin */
+    padding: 0; /* Ensures no default browser padding */
+    font-family: sans-serif;
+    min-height: 100vh; /* Full viewport height */
+    width: 100vw; /* Full viewport width */
+    background-color: #f0f0f0; /* Light gray background for overall page */
+    overflow: hidden; /* Hide scrollbars if content overflows during transitions */
+    transition: background-color 0.3s ease; /* Smooth transition for dark mode */
+}
+
+/* Dark mode styles */
+body.dark-mode {
+    background-color: #1a1a1a; /* Dark background */
+    color: white; /* Light text */
+}
+
+/* Shake animation */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.shake-animation {
+    animation: shake 0.2s ease-in-out 10; /* Shake 10 times for 2 seconds total */
+}
+
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw; /* Explicitly use viewport width for full screen */
+    height: 100vh; /* Explicitly use viewport height for full screen */
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease-in-out, background-color 0.3s ease; /* Smooth transition for dark mode */
+    opacity: 0;
+    visibility: hidden;
+    box-sizing: border-box; /* Include padding in element's total width and height */
+}
+
+body.dark-mode .screen {
+    background-color: #222222; /* Darker screen background */
+    color: white;
+}
+
+.screen.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+#welcome-screen h1 {
+    font-size: 1.8em; /* Adjusted for mobile */
+    color: #333;
+    margin-bottom: 30px; /* Space between text and button */
+    text-align: center;
+    padding: 0 20px; /* Add some padding for smaller screens */
+}
+
+body.dark-mode #welcome-screen h1 {
+    color: #eee;
+}
+
+#signup-button,
+#continue-button { /* Applied to both signup and continue buttons */
+    background-color: #007bff; /* A nice blue color */
+    color: white;
+    padding: 15px 40px; /* Larger touch target for mobile */
+    border: none;
+    border-radius: 25px; /* Rounded edges */
+    font-size: 1.2em; /* Adjusted for mobile */
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    width: clamp(200px, 80%, 300px); /* Responsive width */
+    margin-top: 30px; /* Space above continue button */
+}
+
+#signup-button:hover,
+#continue-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+#signup-button:active,
+#continue-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Styles for the rolling dot animation */
+.rolling-dots-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    margin: 20px 0;
+    position: relative; /* For proper positioning of dots */
+}
+
+.rolling-dot {
+    width: 12px;
+    height: 12px;
+    margin: 0 4px;
+    background-color: #007bff;
+    border-radius: 50%;
+    opacity: 0;
+    animation: dot-fade 1.4s infinite ease-in-out both; /* 'both' keeps initial state */
+}
+
+.rolling-dot:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.rolling-dot:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes dot-fade {
+    0%, 80%, 100% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    40% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Styles for username input field (login screen) */
+#login-username-input {
+    width: clamp(250px, 90%, 400px); /* Responsive width for input */
+    padding: 15px 20px;
+    border: 2px solid #ccc;
+    border-radius: 25px;
+    font-size: 1.1em;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+body.dark-mode #login-username-input {
+    background-color: #333333;
+    border-color: #555;
+    color: white;
+}
+
+body.dark-mode #login-username-input::placeholder {
+    color: #aaaaaa;
+}
+
+#login-username-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* Styles for processing message */
+#processing-message {
+    font-size: 1.2em;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+    padding: 0 20px; /* Ensure text doesn't touch edges on small screens */
+}
+
+body.dark-mode #processing-message {
+    color: #eee;
+}
+
+/* Styles for username initial circle */
+.username-initial-circle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10; /* Ensure it's above other elements if they overlap */
+    cursor: pointer; /* Indicate it's clickable */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* New styles for the search bar */
+.search-bar-container {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 90px; /* Leaves space for the username initial circle */
+    height: 50px; /* Make it similar height to the initial circle */
+    background-color: #f8f8f8; /* Light background for the search bar */
+    border-radius: 25px; /* Half of height to make it rounded on left and right */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0 15px; /* Internal padding */
+    box-sizing: border-box; /* Include padding in element's total width and height */
+    z-index: 5; /* Below the initial circle if they ever overlap by mistake */
+    display: flex; /* Use flexbox to align input and button */
+    align-items: center; /* Center items vertically */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.dark-mode .search-bar-container {
+    background-color: #2a2a2a;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.search-input {
+    flex-grow: 1; /* Make input take up available space */
+    border: none;
+    background: transparent;
+    padding: 0; /* Remove default input padding, container padding handles it */
+    font-size: 1.1em;
+    color: #333;
+    outline: none; /* Remove focus outline */
+    width: 100%; /* Ensure it fills its container in flex context */
+    transition: color 0.3s ease;
+}
+
+body.dark-mode .search-input {
+    color: white;
+}
+
+.search-input::placeholder {
+    color: #888;
+}
+
+body.dark-mode .search-input::placeholder {
+    color: #aaaaaa;
+}
+
+.search-icon-button {
+    background: none;
+    border: none;
+    font-size: 1.4em; /* Larger icon */
+    cursor: pointer;
+    color: #007bff; /* Match theme color */
+    padding: 0 5px; /* Add some horizontal padding to the button itself */
+    margin-left: 5px; /* Space between input and icon */
+    display: flex; /* For centering the glyph if needed */
+    align-items: center;
+    justify-content: center;
+    height: 100%; /* Take full height of container for better touch target */
+    border-radius: 0 25px 25px 0; /* Round only right edges for a smoother transition with search bar */
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    flex-shrink: 0; /* Prevent it from shrinking */
+}
+
+.search-icon-button:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+.search-icon-button:active {
+    background-color: rgba(0, 123, 255, 0.2);
+}
+
+/* Adjust main app screen to not center content, allowing absolute positioning */
+#main-app-screen {
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    justify-content: flex-start; /* Align content to top */
+    align-items: center; /* Center content horizontally */
+    padding-top: 90px; /* Space for search bar and initial circle */
+    padding-bottom: 180px; /* Space for the bottom rectangular box, now containing Ads label */
+    position: relative; /* Needed for absolutely positioned children like the bottom box */
+    overflow-y: auto; /* Allow scrolling if content overflows vertically */
+    box-sizing: border-box; /* Include padding in element's total width and height */
+}
+
+/* New: Style for section titles like "Trending Apps" */
+.section-title {
+    width: clamp(280px, 90%, 600px); /* Match width of boxes below it */
+    text-align: left; /* Align text to the left within its container */
+    font-size: 1.1em;
+    color: #333;
+    margin: 20px 0 10px 0; /* Space above and below, more below to separate from box */
+    padding-left: 10px; /* Align text with the content inside the boxes */
+    box-sizing: border-box;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+body.dark-mode .section-title {
+    color: #eee;
+}
+
+/* New: Styles for the overall bottom ad section containing label and video */
+.bottom-ad-section {
+    position: absolute; /* Position it absolutely within main-app-screen */
+    bottom: 20px; /* 20px from the bottom edge of main-app-screen */
+    left: 50%;
+    transform: translateX(-50%); /* Center horizontally */
+    width: clamp(280px, 90%, 600px); /* Responsive width */
+    display: flex; /* Arrange children vertically */
+    flex-direction: column;
+    align-items: flex-start; /* Align label to the left */
+    z-index: 10; /* Ensure it's above other elements if they overlap */
+}
+
+/* Styles for the "Ads" label */
+.ad-label {
+    font-size: 0.9em;
+    color: #555;
+    margin: 0 0 5px 0; /* Space between label and video box */
+    text-align: left;
+    width: 100%; /* Ensure it spans the width of its parent for text-align to work */
+    padding-left: 5px; /* Slight padding to align text better with the box */
+    transition: color 0.3s ease;
+}
+
+body.dark-mode .ad-label {
+    color: #bbb;
+}
+
+/* New: Styles for the rectangular box that now specifically contains the video */
+.bottom-rectangular-box {
+    width: 100%; /* Take full width of its parent (.bottom-ad-section) */
+    aspect-ratio: 2 / 1; /* Maintain an 8:4 aspect ratio (2:1) */
+    background-color: #e0e0e0; /* A light grey color for the box */
+    border-radius: 15px; /* Slightly rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    overflow: hidden; /* Ensure video corners are rounded with the box */
+    display: flex; /* Use flexbox to center video if needed, though video will fill */
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.dark-mode .bottom-rectangular-box {
+    background-color: #333333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.bottom-rectangular-box video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the entire area of the container */
+    border-radius: 15px; /* Apply border-radius directly to video as well for consistency */
+}
+
+/* New: Styles for the three 8:2 rectangular boxes in the middle */
+.middle-rectangular-box {
+    width: clamp(280px, 90%, 600px); /* Responsive width, consistent with bottom box */
+    aspect-ratio: 4 / 1; /* 8:2 simplifies to 4:1 */
+    background-color: #f0f0f0; /* Slightly different shade for distinction */
+    border-radius: 10px; /* Slightly rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08); /* Subtle shadow */
+    margin-top: 20px; /* Space from the element above (or previous box) */
+    box-sizing: border-box; /* Include padding in element's total width and height */
+    display: flex; /* Use flexbox to align content inside */
+    align-items: center; /* Center items vertically */
+    padding: 10px; /* Add some internal padding */
+    cursor: pointer; /* Indicate clickable */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.dark-mode .middle-rectangular-box {
+    background-color: #333333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.middle-rectangular-box:active {
+    transform: translateY(1px); /* Simple press effect */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+/* New: Styles for the 2:2 square box inside the middle rectangular boxes */
+.middle-rectangular-box .square-box {
+    width: 50px; /* Exact size for 2:2 */
+    height: 50px; /* Exact size for 2:2 */
+    flex-shrink: 0; /* Prevent it from shrinking */
+    aspect-ratio: 1 / 1;
+    background-color: #d0d0d0;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.dark-mode .middle-rectangular-box .square-box {
+    background-color: #444444;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.middle-rectangular-box .square-box .app-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Changed from contain to cover for a bit of zoom */
+    border-radius: 8px; /* Match parent border-radius */
+}
+
+/* Styles for the Search Results Screen */
+#search-results-screen {
+    /* Inherits general .screen styles for full page, white background */
+    justify-content: flex-start; /* Align content to the top */
+    padding-top: 50px; /* Some padding from the top */
+    overflow-y: auto; /* Allow scrolling if content overflows */
+}
+
+.search-query-display-text {
+    font-size: 1.3em;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+    padding: 0 20px;
+    width: 100%; /* Ensure it spans available width */
+    box-sizing: border-box;
+    transition: color 0.3s ease;
+}
+
+body.dark-mode .search-query-display-text {
+    color: #eee;
+}
+
+/* Styles for a generic container for app boxes (trending or search results) */
+.apps-container {
+    width: 100%; /* Take full width of its parent */
+    display: flex;
+    flex-direction: column; /* Stack results vertically */
+    align-items: center; /* Center items horizontally */
+    padding: 0 20px; /* Padding on the sides */
+    box-sizing: border-box;
+}
+
+/* Reusing .middle-rectangular-box for the search result item and trending items */
+.apps-container .middle-rectangular-box {
+    margin-top: 20px; /* Space from the query text or previous item */
+    margin-bottom: 0; /* Override general middle-rectangular-box if it had a bottom margin */
+    /* All other styles inherited from .middle-rectangular-box */
+}
+
+.app-details {
+    flex-grow: 1; /* Take up remaining space */
+    margin-left: 15px; /* Space between image and details */
+    color: #555;
+    font-size: 0.95em;
+    line-height: 1.4;
+    text-align: left; /* Align text within details box */
+    transition: color 0.3s ease;
+}
+
+body.dark-mode .app-details {
+    color: #ccc;
+}
+
+.app-details h3 {
+    margin: 0 0 5px 0;
+    color: #333;
+    font-size: 1.1em;
+    transition: color 0.3s ease;
+}
+
+body.dark-mode .app-details h3 {
+    color: white;
+}
+
+.app-details p {
+    margin: 0;
+}
+
+/* New: Style for the "GET" button in trending/search result boxes */
+.get-button {
+    background-color: powderblue; /* Powder blue background */
+    color: #333; /* Darker text for contrast */
+    padding: 5px 15px; /* Vertical and horizontal padding */
+    border-radius: 25px; /* Make it fully rounded on left and right */
+    font-size: 0.9em; /* Smaller font size */
+    font-weight: bold;
+    margin-left: auto; /* Pushes the button to the far right */
+    cursor: pointer; /* Indicate it's interactive */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: background-color 0.2s ease, transform 0.1s ease, color 0.3s ease;
+    flex-shrink: 0; /* Prevent it from shrinking */
+    height: 30px; /* Ensure a fixed height for consistent rounding */
+    display: none; /* Hide the GET button as per user instruction */
+    align-items: center;
+    justify-content: center;
+}
+
+body.dark-mode .get-button {
+    background-color: #4d79a2; /* Darker powder blue */
+    color: white;
+}
+
+.get-button:hover {
+    background-color: lightskyblue; /* Slightly darker on hover */
+}
+
+body.dark-mode .get-button:hover {
+    background-color: #6a9ac2; /* Dark mode hover */
+}
+
+.get-button:active {
+    transform: translateY(1px); /* Simple press effect */
+    box-shadow: 0 0px 1px rgba(0, 0, 0, 0.15);
+}
+
+/* New: Styles for Account Management Screen elements */
+#account-management-screen {
+    justify-content: flex-start; /* Align content to the top */
+    padding-top: 50px; /* Space from the top */
+}
+
+.account-header-box {
+    width: clamp(280px, 90%, 600px); /* Responsive width */
+    aspect-ratio: 4 / 1; /* Roughly 8:2, simplified to 4:1 */
+    background-color: #f0f0f0; /* Light background */
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    margin-top: 20px;
+    padding: 15px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Push greeting to top, info to bottom */
+    align-items: flex-start; /* Align text to the left */
+    font-size: 0.9em;
+    color: #333;
+    position: relative; /* For copyright positioning */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+}
+
+body.dark-mode .account-header-box {
+    background-color: #333333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    color: white;
+}
+
+.account-header-greeting {
+    margin: 0;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #333; /* Specific color for greeting */
+    transition: color 0.3s ease;
+}
+
+body.dark-mode .account-header-greeting {
+    color: white;
+}
+
+.account-header-info {
+    margin: 0;
+    font-size: 0.8em;
+    color: #555; /* Specific color for info */
+    width: 100%; /* For copyright positioning */
+    text-align: left;
+    transition: color 0.3s ease;
+}
+
+body.dark-mode .account-header-info {
+    color: #bbb;
+}
+
+.account-header-info .copyright {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    font-size: 0.8em;
+}
+
+.menu-item-box {
+    width: clamp(280px, 90%, 600px); /* Responsive width, 8:1 aspect */
+    aspect-ratio: 8 / 1; /* Make it wider, less tall */
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    margin-top: 15px; /* Space between menu items */
+    padding: 15px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Align text to the left */
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.dark-mode .menu-item-box {
+    background-color: #333333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.menu-item-box:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.menu-item-text {
+    margin: 0;
+    font-size: 1em;
+    font-weight: bold;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+body.dark-mode .menu-item-text {
+    color: white;
+}
+
+/* New: App Details Screen specific styles */
+#app-details-screen {
+    justify-content: flex-start; /* Align content to the top */
+    align-items: center; /* Center horizontally for block elements */
+    padding-top: 20px;
+    padding-bottom: 20px;
+    overflow-y: auto;
+    gap: 15px; /* Add gap between sections for better spacing */
+}
+
+.app-details-top-section {
+    width: 100%; /* Take full width of parent */
+    display: flex;
+    justify-content: flex-start; /* Align contents to start */
+    align-items: center; /* Vertically center icon and text */
+    margin-bottom: 0; /* Remove old margin, gap handles it */
+    padding-left: 20px; /* Offset from left edge */
+    padding-right: 20px;
+    box-sizing: border-box;
+    flex-wrap: wrap; /* Allow wrapping if name is too long for one line */
+}
+
+#app-details-app-icon-circle {
+    width: 60px;
+    height: 60px;
+    background-color: #d0d0d0;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.dark-mode #app-details-app-icon-circle {
+    background-color: #444444;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#app-details-app-icon-circle .app-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Changed from contain to cover for a bit of zoom */
+    border-radius: 50%;
+}
+
+#app-details-app-name-display {
+    margin: 0;
+    margin-left: 15px; /* Space between icon and name */
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #333;
+    flex-grow: 1; /* Allow name to take remaining space */
+    text-align: left; /* Align to the left within its allocated space */
+    min-width: 0; /* Allow text to shrink if container is too small */
+    transition: color 0.3s ease;
+}
+
+body.dark-mode #app-details-app-name-display {
+    color: white;
+}
+
+/* Install Button Box */
+#app-details-install-button {
+    border-radius: 20px; /* Rounded corners */
+    padding: 8px 18px; /* Padding for the text */
+    margin-left: 15px; /* Space from app name */
+    flex-shrink: 0; /* Prevent it from shrinking */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.1s ease;
+    position: relative; /* Needed for positioning the progress bar */
+    overflow: hidden; /* Ensure progress bar stays within bounds */
+}
+
+#app-details-install-button:active {
+    transform: translateY(1px);
+}
+
+#app-details-install-button .install-button-text {
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    z-index: 2; /* Keep text above progress bar */
+    position: relative; /* To make z-index effective */
+}
+
+/* "Install" state (default) */
+#app-details-install-button.install-active {
+    background-color: black; /* Dark mode default */
+    border: 2px solid white; /* White lining for dark mode */
+}
+body:not(.dark-mode) #app-details-install-button.install-active {
+    background-color: white; /* Light mode default */
+    border: 2px solid black; /* Black lining for light mode */
+}
+#app-details-install-button.install-active .install-button-text {
+    color: white; /* Dark mode default */
+}
+body:not(.dark-mode) #app-details-install-button.install-active .install-button-text {
+    color: black; /* Light mode default */
+}
+
+/* "Downloading" state */
+#app-details-install-button.downloading-active {
+    background-color: transparent; /* Transparent to show progress bar */
+    border-color: #add8e6; /* Powder blue border */
+}
+body:not(.dark-mode) #app-details-install-button.downloading-active {
+    background-color: transparent;
+    border-color: #add8e6;
+}
+#app-details-install-button.downloading-active .install-button-text {
+    color: transparent; /* Hide text during download */
+}
+
+/* Progress bar filling the button */
+.install-progress-bar {
+    position: absolute;
+    top: 0;
+    right: 0; /* Starts from the right */
+    height: 100%;
+    background-color: #add8e6; /* Powder blue */
+    border-radius: 20px; /* Match parent's rounded corners */
+    transition: width 0.1s linear; /* Smooth fill animation */
+    z-index: 1; /* Below text */
+}
+
+/* "Open" state */
+#app-details-install-button.open-active {
+    background-color: #add8e6; /* Powder blue */
+    border-color: #add8e6; /* Powder blue border */
+}
+body:not(.dark-mode) #app-details-install-button.open-active {
+    background-color: #add8e6;
+    border-color: #add8e6;
+}
+#app-details-install-button.open-active .install-button-text {
+    color: black; /* Black text for "Open" on powder blue */
+}
+
+
+/* New: 8:3 rectangular box for App Description */
+.app-description-box {
+    width: clamp(280px, 90%, 600px); /* Responsive width */
+    aspect-ratio: 8 / 3; /* Exact 8:3 ratio */
+    background-color: #f0f0f0;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    box-sizing: border-box;
+    overflow-y: auto; /* Allow scrolling for long descriptions */
+    display: flex; /* Flex to center text if short */
+    justify-content: flex-start;
+    align-items: flex-start; /* Align text to top-left */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.dark-mode .app-description-box {
+    background-color: #333333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.app-description-text {
+    margin: 0;
+    font-size: 0.95em;
+    line-height: 1.4;
+    color: #333;
+    text-align: left;
+    transition: color 0.3s ease;
+}
+
+body.dark-mode .app-description-text {
+    color: #eee;
+}
+
+/* New: 8:5 rectangular box for scrolling images/content */
+.app-images-scroll-container {
+    width: clamp(280px, 90%, 600px); /* Responsive width, consistent with other boxes */
+    aspect-ratio: 8 / 5; /* Exact 8:5 ratio */
+    background-color: #f0f0f0;
+    border-radius: 15px;
+    box-shadow: 0 44px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 15px; /* Space from description box */
+    padding: 10px; /* Internal padding */
+    box-sizing: border-box;
+    display: flex; /* Arrange children horizontally */
+    flex-direction: row;
+    gap: 10px; /* Space between inner boxes */
+    overflow-x: auto; /* Enable horizontal scrolling */
+    overflow-y: hidden; /* Hide vertical scrollbar */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    scroll-snap-type: x mandatory; /* Snap to items when scrolling */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.dark-mode .app-images-scroll-container {
+    background-color: #333333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Style for the actual screenshot images inside the inner-image-box */
+.inner-image-box .screenshot-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Fill the box, cropping if necessary, while maintaining aspect ratio */
+    border-radius: 10px; /* Match parent border-radius */
+}
+
+/* New: Style for the inner 4:5 rectangular boxes */
+.inner-image-box {
+    flex-shrink: 0; /* Prevent shrinking below explicit width */
+    width: clamp(120px, 45%, 280px); /* Roughly 45% of parent width, so about 2 can show */
+    aspect-ratio: 4 / 5; /* Exact 4:5 ratio */
+    background-color: #e8e8e8; /* Lighter background for inner boxes */
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    scroll-snap-align: start; /* Snap to the start of each box */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #555; /* Placeholder text color */
+    font-size: 0.9em;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+}
+
+body.dark-mode .inner-image-box {
+    background-color: #444444;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    color: #bbb;
+}
+
+/* Hide scrollbar for webkit browsers (Chrome, Safari) */
+.app-images-scroll-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge, and Firefox */
+.app-images-scroll-container {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Reduce the first trending png rectangular box to the exact size 2:2 and shrink the image in it as well */
+#trending-apps-container .middle-rectangular-box:first-child .square-box {
+    width: 50px; /* Specific reduced size */
+    height: 50px; /* Maintains 2:2 aspect ratio */
+    flex-shrink: 0; /* Prevents shrinking below 50px if content grows */
+}
+
+#trending-apps-container .middle-rectangular-box:first-child .square-box .app-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Changed from contain to cover for a bit of zoom */
+    border-radius: 8px; /* Match parent border-radius */
+}
+
+/* Reduce the second trending png rectangular box to the exact size 2:2 and shrink the image as well. */
+#trending-apps-container .middle-rectangular-box:nth-child(2) .square-box {
+    width: 50px; /* Specific reduced size */
+    height: 50px; /* Maintains 2:2 aspect ratio */
+    flex-shrink: 0;
+}
+
+#trending-apps-container .middle-rectangular-box:nth-child(2) .square-box .app-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Changed from contain to cover for a bit of zoom */
+    border-radius: 8px;
+}
+
+/* Zoom all 2:2 searched rectangular box png files a bit */
+#search-results-container .middle-rectangular-box .square-box .app-image {
+    object-fit: cover; /* Changed from 'contain' to 'cover' to zoom the image */
+}

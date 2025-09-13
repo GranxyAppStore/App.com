@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Granxy App Store</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="splash-screen" class="screen active">
+        <!-- This screen will be visible for a few seconds -->
+    </div>
+
+    <div id="welcome-screen" class="screen">
+        <button id="signup-button">Sign up</button>
+    </div>
+
+    <!-- New: Screen for rolling dot after Sign up click -->
+    <div id="signup-loading-screen" class="screen">
+        <div class="rolling-dots-container">
+            <div class="rolling-dot"></div>
+            <div class="rolling-dot"></div>
+            <div class="rolling-dot"></div>
+        </div>
+    </div>
+
+    <!-- New: Screen for username input -->
+    <div id="username-input-screen" class="screen">
+        <input type="text" id="login-username-input" placeholder="Enter Username">
+        <button id="continue-button">Continue</button>
+    </div>
+
+    <!-- New: Screen for processing messages and rolling dot -->
+    <div id="processing-screen" class="screen">
+        <p id="processing-message"></p>
+        <div class="rolling-dots-container">
+            <div class="rolling-dot"></div>
+            <div class="rolling-dot"></div>
+            <div class="rolling-dot"></div>
+        </div>
+    </div>
+
+    <!-- New: Main app screen with username initial -->
+    <div id="main-app-screen" class="screen">
+        <div id="username-initial-container" class="username-initial-circle">
+            <span id="username-initial"></span>
+        </div>
+        <!-- New: Search bar with icon -->
+        <div class="search-bar-container">
+            <input type="text" id="main-search-input" placeholder="Search" class="search-input">
+            <button id="search-icon-button" class="search-icon-button" style="display: none;">🔍</button>
+        </div>
+        <!-- New: Label for Trending Apps -->
+        <p class="section-title">Trending Apps</p>
+        <!-- New: Container for Trending Apps boxes -->
+        <div id="trending-apps-container" class="apps-container">
+            <!-- Trending apps will be dynamically inserted here by JavaScript -->
+        </div>
+        <!-- Future app content will go here -->
+        <!-- New: Bottom section for Ads and Video -->
+        <div class="bottom-ad-section">
+            <p class="ad-label">Ads</p>
+            <div class="bottom-rectangular-box">
+                <!-- New: Video element inside the 8:4 box -->
+                <video controls autoplay muted></video>
+            </div>
+        </div>
+    </div>
+
+    <!-- New: Search Loading Screen -->
+    <div id="search-loading-screen" class="screen">
+        <div class="rolling-dots-container">
+            <div class="rolling-dot"></div>
+            <div class="rolling-dot"></div>
+            <div class="rolling-dot"></div>
+        </div>
+    </div>
+
+    <!-- New: Search Results Screen -->
+    <div id="search-results-screen" class="screen">
+        <p id="search-query-display" class="search-query-display-text"></p>
+        <div id="search-results-container" class="apps-container">
+            <!-- Search results will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <!-- New: Account Management Screen -->
+    <div id="account-management-screen" class="screen">
+        <div class="account-header-box">
+            <p class="account-header-greeting"><span id="managed-username"></span>, let's manage your account</p>
+            <p class="account-header-info">Granxy app store <span class="copyright">©2025</span></p>
+        </div>
+
+        <div id="dark-mode-box" class="menu-item-box">
+            <p class="menu-item-text">Dark mode</p>
+        </div>
+
+        <div id="contact-support-box" class="menu-item-box">
+            <p class="menu-item-text">Contact or Support Granxy</p>
+        </div>
+    </div>
+
+    <!-- New: Biometric Pop-up Overlay (4:4 rectangular box at center, blurring background) -->
+    <div id="biometric-popup-overlay" class="biometric-popup-overlay">
+        <div id="biometric-popup-box" class="biometric-popup-box">
+            <p id="biometric-popup-message">Touch to read biometrics</p>
+        </div>
+    </div>
+
+    <!-- New: App Details Loading Screen (rolling dot) -->
+    <div id="app-details-loading-screen" class="screen">
+        <div class="rolling-dots-container">
+            <div class="rolling-dot"></div>
+            <div class="rolling-dot"></div>
+            <div class="rolling-dot"></div>
+        </div>
+    </div>
+
+    <!-- New: App Details Screen -->
+    <div id="app-details-screen" class="screen">
+        <div class="app-details-top-section">
+            <div id="app-details-app-icon-circle" class="app-icon-circle">
+                <img id="app-details-app-icon" class="app-image" alt="App Icon">
+            </div>
+            <h2 id="app-details-app-name-display" class="app-name-display"></h2>
+            <!-- New: Install Button -->
+            <div id="app-details-install-button" class="install-button-box">
+                <span class="install-button-text">Install</span>
+            </div>
+        </div>
+        <!-- New: 8:3 rectangular box for App Description -->
+        <div id="app-description-box" class="app-description-box">
+            <p id="app-description-text" class="app-description-text"></p>
+        </div>
+
+        <!-- New: Label for Screenshots -->
+        <p class="section-title">Screenshots</p>
+        <!-- New: 8:5 rectangular box under description with horizontal scrolling -->
+        <div id="app-images-scroll-container" class="app-images-scroll-container">
+            <!-- Inner image boxes will be dynamically inserted here by JavaScript -->
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
